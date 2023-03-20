@@ -3,9 +3,13 @@ Public Sub edit_layer_color()
     Dim oScan As ElementScanCriteria
     Dim oEE As ElementEnumerator
     
-    Const targetLvl As String = "Defpoints"
-    Const newColor As Integer = 6
 
+    Const targetLvl As String = "Defpoints"  ' Level name
+    Const newColor As Integer = 6  ' Microstation's color codes
+    'MsgBox "Changing the color of Level '" & targetLvl & "' to " & newColor
+
+
+    ' Create a level object for a level in the current drawing
     Set oLvl = ActiveModelReference.Levels(targetLvl)
     'If (oLvl Is Nothing) Then
     '    MsBox "Level '" & targetLvl & "' does not exist"
@@ -13,20 +17,23 @@ Public Sub edit_layer_color()
     '
     'End If
 
+
+    ' Create a search criteria object consisting of only the target level
     Set oScan = New ElementScanCriteria
     oScan.ExcludeAllLevels
     oScan.IncludeLevel oLvl
     
+
+    ' Create an element enumerator object that uses the search criteria
     Set oEE = ActiveModelReference.Scan(oScan)
 
-    MsgBox "Changing the color of Level '" & targetLvl & "' to " & newColor
 
-    ' This only changes the by-level color,  elements not using by-level will not be alterated
+    ' Changes the by-level color; elements not using by-level will be unaffected
     oLvl.ElementColor = newColor
     ActiveDesignFile.Levels.Rewrite
 
 
-    ' Find all elements on the target level that have not had their color alterated
+    ' Changes the color of elements not using by-level color
     Do While oEE.MoveNext
         If oEE.Current.Color <> newColor Then
             oEE.Current.Color = newColor
@@ -37,6 +44,7 @@ Public Sub edit_layer_color()
     
     Loop
 
-    ActiveDesignFile.Levels.Rewrite
+    ActiveDesignFile.Levels.Rewrite  ' Update drawing
+
 
 End Sub
