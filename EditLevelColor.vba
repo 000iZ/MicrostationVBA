@@ -10,8 +10,9 @@ Public Sub EditLevelColor()
 
 
     'Attempt to create a level object for target level in the current drawing
-    Set oLvl = ActiveModelReference.Levels(targetLvl)
     On Error GoTo Err_InvalidLevelName  'Label statement if an error occurs
+    Set oLvl = ActiveModelReference.Levels(targetLvl)
+    
     
 Err_InvalidLevelName:
     'MsgBox "Error code: " & Err.Number
