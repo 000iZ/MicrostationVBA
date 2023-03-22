@@ -1,4 +1,4 @@
-Public Sub edit_layer_color()
+Public Sub editLayerColor()
     Dim oLvl As Level
     Dim oScan As ElementScanCriteria
     Dim oEE As ElementEnumerator
@@ -10,12 +10,13 @@ Public Sub edit_layer_color()
 
 
     ' Create a level object for a level in the current drawing
-    Set oLvl = ActiveModelReference.Levels(targetLvl)
-    'If (oLvl Is Nothing) Then
-    '    MsBox "Level '" & targetLvl & "' does not exist"
-    '    Exit Sub
-    '
-    'End If
+    If targetIsValidLevelName(targetLvl) Then
+        Set oLvl = ActiveModelReference.Levels(targetLvl)
+    Else
+        MsgBox "Invalid level name"
+        
+        Exit Sub
+    End If
 
 
     ' Create a search criteria object consisting of only the target level
@@ -48,3 +49,35 @@ Public Sub edit_layer_color()
 
 
 End Sub
+
+
+Public Function targetIsValidLevelName(ByVal targetLvl As String) As Boolean
+    targetIsValidLevelName = False
+
+    On Error GoTo err_IsValidLevelName
+    Dim oLvl As Level
+    Set oLvl = ActiveDesignFile.Levels(targetLvl)
+
+    If oLvl Is Nothing Then
+        targetIsValidLevelName = False
+
+    Else
+        targetIsValidLevelName = True
+
+    End If
+    
+    Exit Function
+
+err_IsValidLevelName:
+    Select Case Err.Number
+
+    Case 5:
+        '   Level not found
+        Resume Next
+        
+    Case Else
+        MsgBox "targetIsValidLevelName failed"
+
+    End Select
+
+End Function
