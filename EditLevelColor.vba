@@ -1,4 +1,4 @@
-Public Sub editLayerColor()
+Public Sub EditLevelColor()
     Dim oLvl As Level
     Dim oScan As ElementScanCriteria
     Dim oEE As ElementEnumerator
