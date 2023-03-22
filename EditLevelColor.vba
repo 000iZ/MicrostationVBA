@@ -4,19 +4,13 @@ Public Sub EditLevelColor()
     Dim oEE As ElementEnumerator
     
 
-    Const targetLvl As String = "Defpoints"  ' Level name
-    Const newColor As Integer = 6  ' Microstation's color codes
+    Const targetLvl As String = "c_Dimensions"  ' Level name
+    Const newColor As Integer = 2  ' Microstation's color codes
     'MsgBox "Changing the color of Level '" & targetLvl & "' to " & newColor
 
 
     ' Create a level object for a level in the current drawing
-    If targetIsValidLevelName(targetLvl) Then
-        Set oLvl = ActiveModelReference.Levels(targetLvl)
-    Else
-        MsgBox "Invalid level name"
-        
-        Exit Sub
-    End If
+    
 
 
     ' Create a search criteria object consisting of only the target level
@@ -50,34 +44,3 @@ Public Sub EditLevelColor()
 
 End Sub
 
-
-Public Function targetIsValidLevelName(ByVal targetLvl As String) As Boolean
-    targetIsValidLevelName = False
-
-    On Error GoTo err_IsValidLevelName
-    Dim oLvl As Level
-    Set oLvl = ActiveDesignFile.Levels(targetLvl)
-
-    If oLvl Is Nothing Then
-        targetIsValidLevelName = False
-
-    Else
-        targetIsValidLevelName = True
-
-    End If
-    
-    Exit Function
-
-err_IsValidLevelName:
-    Select Case Err.Number
-
-    Case 5:
-        '   Level not found
-        Resume Next
-        
-    Case Else
-        MsgBox "targetIsValidLevelName failed"
-
-    End Select
-
-End Function
