@@ -15,15 +15,26 @@ Public Sub EditLevelColor()
     
     
 Err_InvalidLevelName:
-    'MsgBox "Error code: " & Err.Number
+    Dim boxTitle As String: boxTitle = "Error: "  'Title for error message box
 
     Select Case Err.Number  'Handle errors based on the error code
-    Case 5:  'Invalid procedure call or argument
-        MsgBox "Cannot find Level '" & targetLvl & "'. No changes will be made."
+    'If no error occurrs, code of 0 is given
+    Case 0:
+
+    'Run-time error '-2147221504 (80040000)': Cannot modify library level attribute'
+    Case -2147221504:
+        MsgBox "Level '" & targetLvl & "' is a library level and cannot be modified.", vbExclamation, boxTitle & Err.Number
+        Exit Sub
+
+    'Run-time error '5': Invalid procedure call or argument
+    'Run-time error '-2147024809 (80070057): Class not registered'
+    Case 5 Or -2147024809:
+        MsgBox "Level '" & targetLvl & "' cannot be found, or is unused.", vbExclamation, boxTitle & Err.Number
         Exit Sub
         
-    Case Else  'Other errors, the target level may be a library reference level
-        MsgBox "An error has occurred. '" & targetLvl & "' may be unused in this file"
+    'Other errors
+    Case Else
+        MsgBox "An unknown error has occurred.", vbExclamation, boxTitle & Err.Number
         Exit Sub
 
     End Select
