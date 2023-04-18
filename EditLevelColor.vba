@@ -31,7 +31,8 @@ Public Sub EditLevelColor()
     'Edit the lines below to specify a level and the color you want to change to
     Const targetLvl As String = "c_Dimensions"  'Level name
     Const newColor As Integer = 2  'Microstation's color codes
-    'MsgBox "Changing the color of Level '" & targetLvl & "' to " & newColor
+    MessageCenter.AddMessage "Changing the color of Level '" & _
+                                targetLvl & "' to " & newColor
 
 
     'Attempt to create a level object for target level in the current drawing
@@ -40,26 +41,35 @@ Public Sub EditLevelColor()
     
     
 Err_InvalidLevelName:
-    Dim boxTitle As String: boxTitle = "Error: "  'Title for error message box
-
+    'Constructing an appropriate error message
+    Dim errorMsg As String: errorMsg = "Error Code: " & Err.Number & _
+                                        " (" & Err.HelpContext & ")" & _
+                                        vbNewLine & Err.Description
+    
     Select Case Err.Number  'Handle errors based on the error code
     'If no error occurrs, code of 0 is given
     Case 0:
 
     'Run-time error '-2147221504 (80040000)': Cannot modify library level attribute'
     Case -2147221504:
-        MsgBox "Level '" & targetLvl & "' is a library level and cannot be modified.", vbExclamation, boxTitle & Err.Number
+        MessageCenter.AddMessage "Level '" & targetLvl & _
+                                    "' is a library level and " & _
+                                    "cannot be modified.", _
+                                    errorMsg, msdMessageCenterPriorityWarning
         Exit Sub
 
     'Run-time error '5': Invalid procedure call or argument
     'Run-time error '-2147024809 (80070057): Class not registered'
     Case 5 Or -2147024809:
-        MsgBox "Level '" & targetLvl & "' cannot be found, or is unused.", vbExclamation, boxTitle & Err.Number
+        MessageCenter.AddMessage "Level '" & targetLvl & _
+                                    "' cannot be found, or is unused.", _
+                                    errorMsg, msdMessageCenterPriorityWarning
         Exit Sub
         
     'Other errors
     Case Else
-        MsgBox "An unknown error has occurred.", vbExclamation, boxTitle & Err.Number
+        MessageCenter.AddMessage "An unknown error has occurred.", _
+                                    errorMsg, msdMessageCenterPriorityWarning
         Exit Sub
 
     End Select
@@ -95,4 +105,3 @@ Err_InvalidLevelName:
 
 
 End Sub
-
