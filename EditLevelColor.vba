@@ -3,7 +3,7 @@
 ' If used without Batch Process, changes will only affect the current file
 ' Refer to the sections below for instructions on how to use this script
 ' All text beginning with ' are commented out and ignored by the script
-' Messages regarding errors, if any, are shown at the bottom of Microstation, 
+' Messages regarding errors, if any, are shown at the bottom of Microstation,
 '   near the View Toggles and the coordinates for X Axis, Y Axis
 '
 '
@@ -12,8 +12,8 @@
 '   eg. Const targetLvl As String = "os_base"  will choose the level os_base
 '
 ' The level's name must be in quotation marks, but is not case-sensitive
-' An error may occur if the specified level doesn't exist or isn't used in the 
-'   file, and no changes will be made if that is the case
+' An error may occur if the specified level cannot be found, and no changes
+'   will be made if that is the case
 '
 '
 ' COLOR
@@ -28,15 +28,18 @@ Public Sub EditLevelColor()
     Dim oLvl As Level
     Dim oScan As ElementScanCriteria
     Dim oEE As ElementEnumerator
-    
 
     'Edit the lines below to specify a level and the color you want to change to
-    Const targetLvl As String = "c_Dimensions"  'Level name
+    Const targetLvl As String = "c_Dimensions"  'Level name, not case-senstive
     Const newColor As Integer = 2  'Microstation's color codes
-    MessageCenter.AddMessage "Changing the color of Level '" & _
-                                targetLvl & "' to " & newColor
+                                
 
+    'Allows library levels to be edited by modifying a Configuration Variable
+    'If edited, library levels are copied into the master-file
+    ActiveWorkspace.AddConfigurationVariable _
+                                        "MS_LEVEL_ALLOW_LIBRARY_LEVEL_EDIT", "1"
 
+    
     'Attempt to create a level object for target level in the current drawing
     On Error GoTo Err_InvalidLevelName  'Label statement if an error occurs
     Set oLvl = ActiveModelReference.Levels(targetLvl)
