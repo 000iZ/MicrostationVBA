@@ -3,11 +3,13 @@
 ' If used without Batch Process, changes will only affect the current file
 ' Refer to the sections below for instructions on how to use this script
 ' All text beginning with ' are commented out and ignored by the script
+' Messages regarding errors, if any, are shown at the bottom of Microstation, 
+'   near the View Toggles and the coordinates for X Axis, Y Axis
 '
 '
 ' LEVEL
 ' To specify the level, edit the word in quotation marks for targetLvl below
-'   eg.  Const targetLvl As String = "os_base"  will choose the level os_base
+'   eg. Const targetLvl As String = "os_base"  will choose the level os_base
 '
 ' The level's name must be in quotation marks, but is not case-sensitive
 ' An error may occur if the specified level doesn't exist or isn't used in the 
@@ -16,7 +18,7 @@
 '
 ' COLOR
 ' To specify the color, edit the number code for newColor below
-'   eg.  Const newColor As Integer = 2  will change the ByLevel color to 2, blue
+'   eg. Const newColor As Integer = 2  will change the ByLevel color to 2, blue
 '
 ' The ByLevel color of the level you specified will be updated, and all elements
 '   on this level not using ByLevel color will be made to use ByLevel
