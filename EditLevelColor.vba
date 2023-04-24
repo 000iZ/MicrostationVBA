@@ -62,34 +62,44 @@ Public Sub EditLevelColor()
 'ERROR HANDLING---------------------------------------------------------------
 Err_InvalidLevelName:
     'Constructing an appropriate error message
-    Dim errorMsg As String: errorMsg = "Error Code: " & Err.Number & _
-                                        " (" & Err.HelpContext & ")" & _
-                                        vbNewLine & Err.Description
-    
+    Dim errorFile As String: errorFile = ActiveDesignFile.Name
+
+    Dim errorHeader As String
+    errorHeader = "In file '" & errorFile & "': Level '" & targetLvl & "' "
+
+    Dim errorDetails As String
+    errorDetails = "Error Code: " & Err.Number & " (" & Err.HelpContext & ")"& _
+                    vbNewLine & Err.Description
+
+    Dim errorMsg As String
+
     Select Case Err.Number  'Handle errors based on the error code
     'If no error occurrs, code of 0 is given
     Case 0:
 
     'Run-time error '-2147221504 (80040000)': Cannot modify library level attribute'
     Case -2147221504:
-        MessageCenter.AddMessage "Level '" & targetLvl & _
-                                    "' is a library level and " & _
-                                    "cannot be modified.", _
-                                    errorMsg, msdMessageCenterPriorityWarning
+        errorMsg = errorHeader & "is a library level and cannot be modified."
+
+        MessageCenter.AddMessage errorMsg, errorDetails, _
+                                    msdMessageCenterPriorityWarning
         Exit Sub
 
     'Run-time error '5': Invalid procedure call or argument
     'Run-time error '-2147024809 (80070057): Class not registered'
     Case 5 Or -2147024809:
-        MessageCenter.AddMessage "Level '" & targetLvl & _
-                                    "' cannot be found, or is unused.", _
-                                    errorMsg, msdMessageCenterPriorityWarning
+        errorMsg = errorHeader & "cannot be found, or is unused."
+
+        MessageCenter.AddMessage errorMsg, errorDetails, _
+                                    msdMessageCenterPriorityWarning
         Exit Sub
         
     'Other errors
     Case Else
-        MessageCenter.AddMessage "An unknown error has occurred.", _
-                                    errorMsg, msdMessageCenterPriorityWarning
+        errorMsg = errorHeader & "has encountered an unknown error."
+
+        MessageCenter.AddMessage errorMsg, errorDetails, _
+                                    msdMessageCenterPriorityWarning
         Exit Sub
 
     End Select
